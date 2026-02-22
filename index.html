@@ -122,6 +122,68 @@
             font-family: monospace;
         }
 
+        /* Mobile Controls */
+        #mobile-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: none;
+            justify-content: space-between;
+            align-items: flex-end;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+
+        .touch-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        .touch-btn:active {
+            background: rgba(231, 76, 60, 0.5);
+            border-color: #e74c3c;
+            transform: scale(0.9);
+        }
+
+        .btn-drift {
+            width: 100px;
+            height: 100px;
+            background: rgba(241, 196, 15, 0.2);
+            border-color: rgba(241, 196, 15, 0.4);
+            font-weight: 900;
+            font-size: 18px;
+            border-radius: 20px;
+        }
+        .btn-drift:active {
+            background: rgba(241, 196, 15, 0.6);
+            border-color: #f1c40f;
+        }
+
+        @media (max-width: 900px) {
+            #mobile-controls { display: flex; }
+            #ui { width: 280px; zoom: 0.8; }
+            #speedometer { bottom: 120px; right: 20px; zoom: 0.7; }
+        }
+
         canvas { display: block; }
     </style>
 </head>
@@ -153,6 +215,20 @@
     <div id="speedometer">
         <div id="speed-value">0</div>
         <div style="font-size: 14px; opacity: 0.7; letter-spacing: 3px;">DRIFT VELOCITY</div>
+    </div>
+
+    <div id="mobile-controls">
+        <div class="control-group">
+            <div class="touch-btn" id="btn-left">←</div>
+            <div class="touch-btn" id="btn-right">→</div>
+        </div>
+        <div class="control-group">
+            <div class="touch-btn btn-drift" id="btn-drift">DRIFT</div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="touch-btn" id="btn-up">↑</div>
+                <div class="touch-btn" id="btn-down">↓</div>
+            </div>
+        </div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
@@ -284,6 +360,34 @@ window.addEventListener("keyup", (e) => {
     if (key === "keya" || key === "arrowleft") keys.a = false;
     if (key === "keyd" || key === "arrowright") keys.d = false;
     if (key === "space") keys.space = false;
+});
+
+// --- Touch Controls Logic ---
+const touchButtons = [
+    { id: 'btn-up', key: 'w' },
+    { id: 'btn-down', key: 's' },
+    { id: 'btn-left', key: 'a' },
+    { id: 'btn-right', key: 'd' },
+    { id: 'btn-drift', key: 'space' }
+];
+
+touchButtons.forEach(btn => {
+    const el = document.getElementById(btn.id);
+    if (el) {
+        el.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (isGameOver) return;
+            keys[btn.key] = true;
+        });
+        el.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys[btn.key] = false;
+        });
+        el.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            keys[btn.key] = false;
+        });
+    }
 });
 
 function showMsg(text) {
