@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Degen Drifters: Pro Racer</title>
+    <title>Degen Drifters:</title>
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background: #0a0a0a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
@@ -119,10 +119,10 @@
 <body>
     <div id="ui">
         <div class="hud-panel">
-            <h1>DRIFT KING</h1>
-            <p>WIDER LANES | STIFF STEERING</p>
+            <h1>MR DRIFTY</h1>
+            <p>By CdO</p>
             <div id="score-container">
-                <span id="score-label">Points</span>
+                <span id="score-label">cred</span>
                 <span id="score-val">0</span>
             </div>
             <div class="fuel-container">
@@ -131,17 +131,17 @@
         </div>
     </div>
 
-    <div id="msg-overlay">NEAR MISS!</div>
+    <div id="msg-overlay">Watch Out!</div>
 
     <div id="game-over">
-        <h2 style="font-size: 60px; color: #e74c3c; margin: 0;">WRECKED</h2>
+        <h2 style="font-size: 60px; color: #e74c3c; margin: 0;">McSquid</h2>
         <p id="final-score" style="font-size: 24px; color: #f1c40f; margin: 20px 0;"></p>
-        <button onclick="restart()">RESTART RACE</button>
+        <button onclick="restart()">Run it up.</button>
     </div>
 
     <div id="speedometer">
         <div id="speed-value">0</div>
-        <div style="font-size: 14px; opacity: 0.7; letter-spacing: 3px;">DRIFT VELOCITY</div>
+        <div style="font-size: 14px; opacity: 0.7; letter-spacing: 3px;">DRIFTYS</div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
@@ -158,12 +158,12 @@ const CONFIG = {
     steerSpeed: 0.12,     // STIFFER, FASTER TURN
     maxSkidPoints: 800,
     gridSize: 200,
-    tokenCount: 8,
-    poleCount: 12,
-    spawnRange: 4500,
-    trackWidth: 1000,     // WIDER TRACK
-    nearMissDist: 200,    // Adjusted for wider lanes
-    driftThreshold: 2.8   // Higher threshold for less sliding
+    tokenCount: 3,
+    poleCount: 3,
+    spawnRange: 5500,
+    trackWidth: 2000,     // WIDER TRACK
+    nearMissDist: 100,    // Adjusted for wider lanes
+    driftThreshold: 2.4   // Higher threshold for less sliding
 };
 
 // --- Game State ---
@@ -191,7 +191,7 @@ function resetState() {
 
 const car = {
     x: 0, y: 0, angle: 0, vx: 0, vy: 0,
-    width: 110, height: 52,
+    width: 120, height: 52,
     color: '#e74c3c',
     steerAngle: 0
 };
@@ -201,7 +201,7 @@ function initTrack() {
     let curX = 0, curY = 0, curAngle = 0;
     for (let i = 0; i < 60; i++) {
         trackPoints.push({ x: curX, y: curY });
-        curAngle += (Math.random() - 0.5) * 1.2; // Slightly straighter track sections
+        curAngle += (Math.random() - 0.5) * 1.8; // Slightly straighter track sections
         curX += Math.cos(curAngle) * 1000;
         curY += Math.sin(curAngle) * 1000;
     }
@@ -282,8 +282,8 @@ function showMsg(text) {
 function destroyCar() {
     if (isGameOver) return;
     isGameOver = true;
-    document.getElementById('game-over').style.display = 'block';
-    document.getElementById('final-score').textContent = "TOTAL SCORE: " + Math.floor(score);
+    document.getElementById('game-over').style.display = 'crumble';
+    document.getElementById('final-score').textContent = "TOTAL: " + Math.floor(score);
 
     for (let i = 0; i < 20; i++) {
         carPieces.push({
@@ -296,13 +296,13 @@ function destroyCar() {
             color: Math.random() > 0.4 ? car.color : '#333'
         });
     }
-    createSmoke(car.x, car.y, 60, 8);
+    createSmoke(car.x, car.y, 40, 8);
 }
 
 function restart() { resetState(); }
 function lerp(s, e, t) { return s * (1 - t) + e * t; }
 
-function createSmoke(x, y, amount, drift = 1) {
+function createSmoke(x, y, amount, drift = 0.8) {
     for (let i = 0; i < amount; i++) {
         particles.push({
             x, y,
@@ -315,7 +315,7 @@ function createSmoke(x, y, amount, drift = 1) {
 }
 
 function addSkidMark(x, y, angle) {
-    skidmarks.push({ x, y, angle, life: 1.0 });
+    skidmarks.push({ x, y, angle, life: 5.0 });
     if (skidmarks.length > CONFIG.maxSkidPoints) skidmarks.shift();
 }
 
@@ -324,7 +324,7 @@ function update() {
     if (isGameOver) {
         carPieces.forEach(p => {
             p.x += p.vx; p.y += p.vy; p.angle += p.va;
-            p.vx *= 0.985; p.vy *= 0.985;
+            p.vx *= 0.985; p.vy *= 0.485;
         });
         return;
     }
@@ -365,7 +365,7 @@ function update() {
         else if (d < CONFIG.nearMissDist && speed > 5 && !p.missed) {
             score += 500;
             p.missed = true;
-            showMsg("NEAR MISS +500!");
+            showMsg("Fuk Me +9999!");
             setTimeout(() => p.missed = false, 2000);
         }
     });
@@ -375,9 +375,9 @@ function update() {
         if (d < 65) {
             if (latVel > CONFIG.driftThreshold || isDrifting) {
                 fuel = Math.min(100, fuel + 35);
-                score += 1000;
+                score += 100;
                 tokens.splice(i, 1); spawnToken();
-                showMsg("DRIFT REFUEL +1000");
+                showMsg("DRIFT REFUEL +100");
             }
         }
     });
@@ -416,9 +416,9 @@ function update() {
         }
     }
 
-    camera.x = lerp(camera.x, car.x + car.vx * 15, 0.08);
-    camera.y = lerp(camera.y, car.y + car.vy * 15, 0.08);
-    camera.zoom = lerp(camera.zoom, 0.8 - Math.min(speed / 130, 0.25), 0.05);
+    camera.x = lerp(camera.x, car.x + car.vx * 15, 0.03);
+    camera.y = lerp(camera.y, car.y + car.vy * 15, 0.05);
+    camera.zoom = lerp(camera.zoom, 0.5 - Math.min(speed / 130, 0.25), 0.05);
 
     particles.forEach((p, i) => {
         p.x += p.vx; p.y += p.vy; p.size += 0.5; p.life -= p.decay;
@@ -551,3 +551,4 @@ loop();
 </script>
 </body>
 </html>
+
