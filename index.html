@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Degen Drifters: Pro Racer</title>
+    <title>Degen Drifters</title>
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background: #0a0a0a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
@@ -128,8 +128,8 @@
 <body>
     <div id="ui">
         <div class="hud-panel">
-            <h1>DRIFT KING</h1>
-            <p>WIDER LANES | STIFF STEERING</p>
+            <h1>DRIFT</h1>
+            <p>Rally OMalley</p>
             <div id="score-container">
                 <span id="score-label">Points</span>
                 <span id="score-val">0</span>
@@ -141,13 +141,13 @@
         </div>
     </div>
 
-    <div id="msg-overlay">NEAR MISS!</div>
+    <div id="msg-overlay">JUST MISSED!</div>
 
     <div id="game-over">
         <h2 id="go-title" style="font-size: 60px; color: #e74c3c; margin: 0;">WRECKED</h2>
         <p id="final-score" style="font-size: 24px; color: #f1c40f; margin: 20px 0;"></p>
         <p id="final-time" style="font-size: 18px; color: #fff; margin: 10px 0;"></p>
-        <button id="restart-btn" onclick="restart()">RESTART RACE</button>
+        <button id="restart-btn" onclick="restart()">RESTART</button>
     </div>
 
     <div id="speedometer">
@@ -169,11 +169,11 @@ const CONFIG = {
     steerSpeed: 0.12,
     maxSkidPoints: 800,
     gridSize: 200,
-    tokenCount: 8,
-    poleCount: 17,        // ADDED 5 POLES (was 12)
+    tokenCount: 3,
+    poleCount: 5,        // ADDED 5 POLES (was 12)
     spawnRange: 4500,
     trackWidth: 1000,
-    nearMissDist: 200,
+    nearMissDist: 00,
     driftThreshold: 2.8
 };
 
@@ -183,7 +183,7 @@ let trackPoints = [];
 let startTime, timer = 0, isFinished = false;
 
 function resetState() {
-    camera = { x: 0, y: 0, zoom: 0.8 };
+    camera = { x: 0, y: 0, zoom: 0.4 };
     keys = { w: false, s: false, a: false, d: false, space: false };
     particles = [];
     skidmarks = [];
@@ -642,3 +642,4 @@ loop();
 </script>
 </body>
 </html>
+
