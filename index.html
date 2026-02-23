@@ -3,38 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeDrifters</title>
+    <title>De Drifters</title>
     <style>
-        body { display: flex; justify-content: space-between; align-items: center; height: 100vh; margin: 0; }
-        #controls { display: flex; flex-direction: column; align-items: center; position: absolute; bottom: 20px; width: 100%; }
-        #left-handbrake { position: absolute; left: 20px; width: 50px; height: 100px; background: rgba(255, 0, 0, 0.7); }
-        #right-accelerate { position: absolute; right: 20px; width: 50px; height: 100px; background: rgba(0, 255, 0, 0.7); }
-        #tilt-control { position: absolute; width: 100%; height: 100%; z-index: 1; }
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; background: #eaeaea; }
+        /* Updated race track width */
+        .race-track { width: 80%; }
+        /* Oil slick effect */
+        .oil-slick { position: absolute; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.5); border-radius: 50%; animation: spin 2s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="tilt-control"></div>
-    <div id="controls">
-        <div id="left-handbrake">Handbrake</div>
-        <div id="right-accelerate">Accelerate</div>
-    </div>
+    <canvas id="gameCanvas"></canvas>
     <script>
-        const tiltControl = document.getElementById('tilt-control');
-        const leftHandbrake = document.getElementById('left-handbrake');
-        const rightAccelerate = document.getElementById('right-accelerate');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        window.addEventListener('deviceorientation', (event) => {
-            const { alpha, beta, gamma } = event;
-            // Add your steering logic based on the gyroscope data here
-        });
+        // Implementation for race track
+        const raceTrack = {
+            width: canvas.width * 0.8,
+            // Placeholders for additional features
+            checkpoints: [],
+            jumps: [],
+            oilSlicks: []
+        }; 
 
-        rightAccelerate.addEventListener('touchstart', () => {
-            // Logic for accelerating
-        });
+        // Function to add checkpoints
+        function addCheckpoint(x, y) {
+            raceTrack.checkpoints.push({x, y});
+            // Draw the checkpoint
+            ctx.fillStyle = 'yellow';
+            ctx.fillRect(x, y, 10, 10);
+        }
 
-        leftHandbrake.addEventListener('touchstart', () => {
-            // Logic for handbrake
-        });
+        // Function to add jumps to the track
+        function addJump(x, y) {
+            raceTrack.jumps.push({x, y});
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(x, y, 50, 10); // Visual representation of a jump
+        }
+
+        // Function to add oil slicks
+        function addOilSlick(x, y) {
+            raceTrack.oilSlicks.push({x, y});
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(x, y, 25, 0, Math.PI * 2); // Circle for oil slick
+            ctx.fill();
+        }
+
+        // Example of adding features
+        addCheckpoint(100, 150);
+        addJump(200, 300);
+        addOilSlick(400, 400);
+
+        // Game loop and physics code go here...
     </script>
 </body>
 </html>
