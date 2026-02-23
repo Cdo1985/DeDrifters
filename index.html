@@ -173,7 +173,7 @@ const CONFIG = {
     poleCount: 5,        // ADDED 5 POLES (was 12)
     spawnRange: 4500,
     trackWidth: 1000,
-    nearMissDist: 00,
+    nearMissDist: 300,
     driftThreshold: 2.8
 };
 
@@ -183,7 +183,7 @@ let trackPoints = [];
 let startTime, timer = 0, isFinished = false;
 
 function resetState() {
-    camera = { x: 0, y: 0, zoom: 0.4 };
+    camera = { x: 0, y: 0, zoom: 0.2 };
     keys = { w: false, s: false, a: false, d: false, space: false };
     particles = [];
     skidmarks = [];
@@ -310,7 +310,7 @@ function destroyCar() {
         document.getElementById('restart-btn').style.display = 'inline-block';
     }, 3000);
 
-    for (let i = 0; i < 60; i++) { // INCREASED PIECES (was 20)
+    for (let i = 0; i < 80; i++) { // INCREASED PIECES (was 20)
         carPieces.push({
             x: car.x, y: car.y,
             vx: car.vx + (Math.random() - 0.5) * 15,
@@ -321,7 +321,7 @@ function destroyCar() {
             color: Math.random() > 0.4 ? car.color : '#333'
         });
     }
-    createSmoke(car.x, car.y, 60, 8);
+    createSmoke(car.x, car.y, 40, 8);
 }
 
 function finishRace() {
@@ -642,4 +642,5 @@ loop();
 </script>
 </body>
 </html>
+
 
